@@ -7,7 +7,7 @@ function Header() {
         className="header-banner"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(75,46,30,0.55), rgba(75,46,30,0.55)), url('/public/gambar/martabak_header.jpg')",
+            "linear-gradient(rgba(75,46,30,0.55), rgba(75,46,30,0.55)), url('/public/Gambar/martabak_header.jpg')",
         }}
       >
         <div className="header-content">
