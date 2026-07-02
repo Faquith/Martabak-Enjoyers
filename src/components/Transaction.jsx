@@ -43,7 +43,7 @@ function Transaction({
             </div>
 
             <div className="qris-wrapper">
-              <img src="/public/qris.png" alt="Kode QRIS pembayaran" />
+              <img src="/qris.png" alt="Kode QRIS pembayaran" />
             </div>
             <p className="info-qris">
               Silakan scan QRIS untuk menyelesaikan pembayaran

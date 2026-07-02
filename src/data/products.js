@@ -8,7 +8,7 @@ export const bestSellerProducts = [
     deskripsi:
       "Martabak manis tebal dengan taburan coklat meses dan keju parut melimpah.",
     harga: 35000,
-    gambar: "/Gambar/coklat-keju.webp",
+    gambar: "/Gambar/coklat-keju.jpg",
   },
   {
     id: "bs-2",
