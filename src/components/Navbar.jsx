@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { FaShoppingCart, FaMoon, FaSun, FaBars, FaTimes, FaSearch } from 'react-icons/fa'
+import { FaShoppingCart, FaMoon, FaSun, FaBars, FaTimes, FaSearch, FaUser, FaSignOutAlt } from 'react-icons/fa'
 
-function Navbar({ jumlahKeranjang, darkMode, toggleDarkMode, searchTerm, setSearchTerm }) {
+function Navbar({ jumlahKeranjang, darkMode, toggleDarkMode, searchTerm, setSearchTerm, userLogin, onLogout }) {
   const [menuTerbuka, setMenuTerbuka] = useState(false)
 
   const menuItems = [
@@ -32,20 +32,14 @@ function Navbar({ jumlahKeranjang, darkMode, toggleDarkMode, searchTerm, setSear
           />
         </div>
 
-        <button
-          className="navbar-toggle"
-          onClick={() => setMenuTerbuka(!menuTerbuka)}
-          aria-label="Buka menu"
-        >
+        <button className="navbar-toggle" onClick={() => setMenuTerbuka(!menuTerbuka)} aria-label="Buka menu">
           {menuTerbuka ? <FaTimes /> : <FaBars />}
         </button>
 
         <ul className={`navbar-menu ${menuTerbuka ? 'aktif' : ''}`}>
           {menuItems.map((item) => (
             <li key={item.href}>
-              <a href={item.href} onClick={handleClick}>
-                {item.label}
-              </a>
+              <a href={item.href} onClick={handleClick}>{item.label}</a>
             </li>
           ))}
           <li>
@@ -59,6 +53,15 @@ function Navbar({ jumlahKeranjang, darkMode, toggleDarkMode, searchTerm, setSear
               {darkMode ? <FaSun /> : <FaMoon />}
             </button>
           </li>
+          {userLogin && (
+            <li className="navbar-user">
+              <FaUser />
+              <span>{userLogin.nama}</span>
+              <button className="btn-logout" onClick={onLogout} title="Keluar">
+                <FaSignOutAlt />
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

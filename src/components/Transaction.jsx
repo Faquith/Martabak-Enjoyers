@@ -1,20 +1,15 @@
-import React from "react";
-import { FaTimes, FaCheckCircle } from "react-icons/fa";
+import React from 'react'
+import { FaTimes, FaCheckCircle } from 'react-icons/fa'
 
 function formatRupiah(angka) {
-  return "Rp" + angka.toLocaleString("id-ID");
+  return 'Rp' + angka.toLocaleString('id-ID')
 }
 
-function Transaction({
-  tampil,
-  totalHarga,
-  ongkir,
-  totalBayar,
-  tutupPopup,
-  selesaikanPesanan,
-  pesananSelesai,
-}) {
-  if (!tampil) return null;
+function Transaction({ tampil, totalHarga, ongkir, totalBayar, tutupPopup, selesaikanPesanan, pesananSelesai }) {
+  if (!tampil) return null
+
+  const ppn = Math.round(totalHarga * 0.1)
+  const grandTotal = totalHarga + ppn + ongkir
 
   return (
     <div className="transaction-overlay" onClick={tutupPopup}>
@@ -26,11 +21,14 @@ function Transaction({
         {!pesananSelesai ? (
           <>
             <h2>Pembayaran QRIS</h2>
-
             <div className="rincian-bayar">
               <div className="rincian-baris">
                 <span>Subtotal Produk</span>
                 <span>{formatRupiah(totalHarga)}</span>
+              </div>
+              <div className="rincian-baris">
+                <span>PPN 10%</span>
+                <span>{formatRupiah(ppn)}</span>
               </div>
               <div className="rincian-baris">
                 <span>Ongkir (Area Pekalongan)</span>
@@ -38,16 +36,13 @@ function Transaction({
               </div>
               <div className="rincian-baris rincian-total">
                 <span>Total Pembayaran</span>
-                <span>{formatRupiah(totalBayar)}</span>
+                <span>{formatRupiah(grandTotal)}</span>
               </div>
             </div>
-
             <div className="qris-wrapper">
               <img src="/qris.png" alt="Kode QRIS pembayaran" />
             </div>
-            <p className="info-qris">
-              Silakan scan QRIS untuk menyelesaikan pembayaran
-            </p>
+            <p className="info-qris">Silakan scan QRIS untuk menyelesaikan pembayaran</p>
             <p className="info-qris-sub">Pesanan Anda sedang diproses</p>
             <button className="btn-konfirmasi" onClick={selesaikanPesanan}>
               Saya Sudah Membayar
@@ -57,15 +52,12 @@ function Transaction({
           <div className="pesanan-sukses">
             <FaCheckCircle className="icon-sukses" />
             <h2>Terima Kasih!</h2>
-            <p>
-              Pesanan Anda telah kami terima dan sedang diproses oleh dapur
-              kami.
-            </p>
+            <p>Pesanan Anda telah kami terima dan sedang diproses oleh dapur kami.</p>
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default Transaction;
+export default Transaction

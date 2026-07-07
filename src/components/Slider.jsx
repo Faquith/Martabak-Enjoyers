@@ -1,14 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 
+// Gambar slider pakai gambar dari /public/img/ (sesuaikan nama file jika berbeda)
 const SLIDE_DATA = [
-  { src: "/img/martabak1.jpg", label: "Martabak Manis Coklat Keju" },
-  { src: "/img/martabak2.jpg", label: "Martabak Telur Spesial" },
-  { src: "/img/martabak3.jpg", label: "Martabak Manis Kacang Susu" },
-  { src: "/img/martabak4.jpg", label: "Martabak Manis Green Tea" },
-  { src: "/img/martabak5.jpg", label: "Martabak Telur Jumbo" },
+  {
+    src: "/img/martabak1.jpg",
+    label: "Martabak Manis Coklat Keju",
+    harga: 35000,
+  },
+  { src: "/img/martabak2.jpg", label: "Martabak Telur Spesial", harga: 30000 },
+  {
+    src: "/img/martabak3.jpg",
+    label: "Martabak Manis Green Tea",
+    harga: 38000,
+  },
+  {
+    src: "/img/martabak4.jpg",
+    label: "Martabak Telur Ayam",
+    harga: 25000,
+  },
+  { src: "/img/martabak5.jpg", label: "Martabak Manis Original", harga: 22000 },
 ];
 
-const TAB_HEIGHT = 27; // tinggi thumbnail navigator (px)
+function formatRupiah(angka) {
+  return "Rp" + angka.toLocaleString("id-ID");
+}
+
+const TAB_HEIGHT = 27;
 
 function muatScript(src) {
   return new Promise((resolve, reject) => {
@@ -27,39 +44,29 @@ function muatScript(src) {
 }
 
 function Slider() {
-  const wrapperRef = useRef(null); // ref ke div pembungkus section
-  const sliderRef = useRef(null); // ref ke div #slider1_container
-  const instanceRef = useRef(null); // ref ke instance Jssor
-
-  // Ukuran aktual slider dihitung secara reaktif
+  const wrapperRef = useRef(null);
+  const sliderRef = useRef(null);
+  const instanceRef = useRef(null);
   const [ukuran, setUkuran] = useState({ lebar: 960, tinggiSlide: 540 });
 
-  // Hitung ulang ukuran setiap kali lebar wrapper berubah
   useEffect(() => {
     if (!wrapperRef.current) return;
-
     const hitung = () => {
       const lebar = wrapperRef.current.clientWidth || 960;
-      // 16:9 → tinggi area gambar = lebar × 9/16
       const tinggiSlide = Math.round((lebar * 9) / 16);
       setUkuran({ lebar, tinggiSlide });
-
-      // Scale ulang Jssor kalau sudah diinisialisasi
       if (instanceRef.current?.$ScaleWidth) {
         instanceRef.current.$ScaleWidth(lebar);
       }
     };
-
     hitung();
     const ro = new ResizeObserver(hitung);
     ro.observe(wrapperRef.current);
     return () => ro.disconnect();
   }, []);
 
-  // Inisialisasi Jssor setelah ukuran pertama kali diset
   useEffect(() => {
     let dibatalkan = false;
-
     async function initSlider() {
       try {
         await muatScript("/js/jquery.min.js");
@@ -99,8 +106,6 @@ function Slider() {
           "slider1_container",
           options,
         );
-
-        // Scale awal sesuai lebar wrapper
         if (wrapperRef.current) {
           instanceRef.current.$ScaleWidth(wrapperRef.current.clientWidth);
         }
@@ -108,7 +113,6 @@ function Slider() {
         console.error(err);
       }
     }
-
     initSlider();
     return () => {
       dibatalkan = true;
@@ -117,13 +121,12 @@ function Slider() {
   }, []);
 
   const { lebar, tinggiSlide } = ukuran;
-  const tinggiTotal = tinggiSlide + TAB_HEIGHT; // total = gambar + tab navigator
+  const tinggiTotal = tinggiSlide + TAB_HEIGHT;
 
   return (
     <section className="slider-section">
       <h2 className="section-title">Promo Spesial</h2>
 
-      {/* Wrapper responsif — lebar mengikuti section */}
       <div ref={wrapperRef} style={{ maxWidth: "960px", margin: "0 auto" }}>
         <div
           id="slider1_container"
@@ -138,7 +141,6 @@ function Slider() {
             boxShadow: "0 4px 14px rgba(75, 46, 30, 0.15)",
           }}
         >
-          {/* Slides Container */}
           <div
             u="slides"
             style={{
@@ -151,7 +153,7 @@ function Slider() {
             }}
           >
             {SLIDE_DATA.map((slide) => (
-              <div key={slide.src}>
+              <div key={slide.src} style={{ position: "relative" }}>
                 <img
                   src={slide.src}
                   alt={slide.label}
@@ -163,12 +165,46 @@ function Slider() {
                     display: "block",
                   }}
                 />
+                {/* Overlay nama produk & harga */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background:
+                      "linear-gradient(transparent, rgba(75,46,30,0.85))",
+                    padding: "3rem 1.5rem 1.2rem",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#fff",
+                      fontSize: "clamp(1rem, 2.5vw, 1.6rem)",
+                      fontWeight: "bold",
+                      textShadow: "1px 1px 6px rgba(0,0,0,0.6)",
+                    }}
+                  >
+                    {slide.label}
+                  </p>
+                  <p
+                    style={{
+                      margin: "0.3rem 0 0",
+                      color: "#FFD700",
+                      fontSize: "clamp(0.85rem, 2vw, 1.2rem)",
+                      fontWeight: "700",
+                      textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    {formatRupiah(slide.harga)}
+                  </p>
+                </div>
                 <div u="thumb">{slide.label}</div>
               </div>
             ))}
           </div>
 
-          {/* Thumbnail Navigator */}
           <div
             u="thumbnavigator"
             className="jssort14"

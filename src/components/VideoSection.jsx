@@ -13,7 +13,7 @@ function VideoSection() {
         <iframe
           width="960"
           height="300"
-          src="https://www.youtube.com/embed/ZN6-OOJ5dTk"
+          src="https://www.youtube.com/embed/ze2I_iRxTds"
           title="Proses Pembuatan Martabak"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
